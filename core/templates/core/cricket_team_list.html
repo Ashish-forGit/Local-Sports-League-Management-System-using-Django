@@ -1,0 +1,36 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Cricket Team Members</h2>
+    <a href="{% url 'core:register_cricket' %}" class="btn btn-primary mb-3">Register New Player</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in players %}
+            <tr>
+                <td><img src="{{ player.image.url }}" alt="Player Image" width="50"></td>
+                <td>{{ player.name }}</td>
+                <td>{{ player.position }}</td>
+                <td>{{ player.email }}</td>
+                <td>{{ player.phone }}</td>
+                <td>
+                    <a href="{% url 'core:update_cricket' player.id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'core:delete_cricket' player.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+

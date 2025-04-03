@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Upcoming Matches</h2>
+    <div class="row">
+        {% for match in matches %}
+        <div class="col-md-6">
+            <div class="card p-3 mb-3">
+                <h4>{{ match.team_a }} vs {{ match.team_b }}</h4>
+                <p><strong>Date:</strong> {{ match.match_date }}</p>
+                <p><strong>Time:</strong> {{ match.match_time }}</p>
+                <p><strong>Venue:</strong> {{ match.venue }}</p>
+                
+                <!-- Edit Button -->
+                <a href="{% url 'core:edit_match' match.id %}" class="btn btn-primary btn-sm">Edit</a>
+
+                <!-- Delete Button -->
+                <form action="{% url 'core:delete_match' match.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this match?');">
+                        Delete
+                    </button>
+                </form>
+                
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

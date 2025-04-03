@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Football Team - {{ team_name|title }}</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in players %}
+            <tr>
+                <td>
+                    {% if player.image %}
+                        <img src="{{ player.image.url }}" alt="Player Image" width="50" height="50">
+                    {% else %}
+                        <img src="/static/default_player.png" alt="Default Image" width="50" height="50">
+                    {% endif %}
+                </td>
+                <td>{{ player.name }}</td>
+                <td>{{ player.position }}</td>
+                <td>{{ player.email }}</td>
+                <td>{{ player.phone }}</td>
+                <td>
+                    <a href="{% url 'core:update_cricket' player.id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'core:delete_cricket' player.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">No players found for this team.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+{% load static %}  
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Schedule a Match</h2>
+    <div class="row text-center">
+        <div class="col-md-6">
+            <a href="{% url 'core:ScheduledMatch' %}">
+                <img src="{% static 'images/cricket_icon.png' %}" alt="Cricket" class="img-fluid">
+                
+            </a>
+            <h3>Cricket</h3>
+        </div>
+        <div class="col-md-6">
+            <a href="{% url 'core:schedule_match' %}?sport=Football">
+                <img src="{% static 'images/football_icon.png' %}" alt="Football" class="img-fluid">
+            </a>
+            <h3>Football</h3>
+        </div>
+    </div>
+</div>
+{% endblock %}

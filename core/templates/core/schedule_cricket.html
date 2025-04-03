@@ -1,0 +1,34 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Schedule a Cricket Match</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="team_a">Team A:</label>
+            <input type="text" class="form-control" name="team_a" required>
+        </div>
+        <div class="form-group">
+            <label for="team_b">Team B:</label>
+            <input type="text" class="form-control" name="team_b" required>
+        </div>
+        <div class="form-group">
+            <label for="match_date">Match Date:</label>
+            <input type="date" class="form-control" name="match_date" required>
+        </div>
+        <div class="form-group">
+            <label for="match_time">Match Time:</label>
+            <input type="time" class="form-control" name="match_time" required>
+        </div>
+        <div class="form-group">
+            <label for="venue">Venue:</label>
+            <select class="form-control" name="venue" required>
+                <option value="Eden Gardens">Eden Gardens</option>
+                <option value="Wankhede Stadium">Wankhede Stadium</option>
+                <option value="Lord's">Lord's</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Schedule Match</button>
+    </form>
+</div>
+{% endblock %}

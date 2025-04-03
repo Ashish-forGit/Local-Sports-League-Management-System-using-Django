@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Register New Football Player</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Register Player</button>
+        <a href="{% url 'core:football_team_list' team_name='all' %}" class="btn btn-primary">View All Players</a>
+    </form>
+</div>
+{% endblock %}
