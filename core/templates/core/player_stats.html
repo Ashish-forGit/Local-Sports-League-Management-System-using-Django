@@ -1,61 +1,134 @@
-{% extends 'core/base.html' %}
-{% load custom_filters %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Player Stats</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        .error {
+            color: red;
+        }
+        img {
+            border-radius: 50%;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
 
+<h2>Search Player Stats</h2>
 
+<form method="get">
+    {{ form.as_p }}
+    <button type="submit">Search</button>
+</form>
 
+<div id="player-info-container"></div>
 
-{% block content %}
-<div class="container">
-    <h2>Search for Cricket Player Statistics</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-    <pre>{{ player_data }}</pre>  {# Debugging line #}
+<script>
+    const playerData = {{ player_data|safe }};
 
+    if (playerData && !playerData.error) {
+        const container = document.getElementById('player-info-container');
 
-    {% if player_data %}
-        {% if player_data.error %}
-            <p>{{ player_data.error }}</p>
-        {% else %}
+        const name = playerData["name"] || 'N/A';
+        const country = playerData["country"] || 'N/A';
+        const role = playerData["role"] || 'N/A';
+        const image = playerData["image"] || '';
+
+        container.innerHTML += `
             <h3>Player Information</h3>
-            <p><strong>Name:</strong> {{ player_data.0|get_item:"Player Name" }}</p>
+            <img src="${image}" alt="${name}" width="100" height="100" />
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Country:</strong> ${country}</p>
+            <p><strong>Role:</strong> ${role}</p>
+        `;
 
-            <p><strong>Country:</strong> {{ player_data.0|get_item:"Country" }}</p>
-            <p><strong>Role:</strong> {{ player_data.0|get_item:"Role" }}</p>
+        // Batting Stats
+        const battingStats = playerData["batting_stats"];
+        if (battingStats) {
+            container.innerHTML += `<h4>Batting Career Summary</h4>`;
+            container.innerHTML += `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Format</th>
+                            <th>Matches</th>
+                            <th>Runs</th>
+                            <th>High Score</th>
+                            <th>Average</th>
+                            <th>Strike Rate</th>
+                            <th>100s</th>
+                            <th>50s</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${Object.entries(battingStats).map(([format, stats]) => `
+                            <tr>
+                                <td>${format.toUpperCase()}</td>
+                                <td>${stats.matches || '0'}</td>
+                                <td>${stats.runs || '0'}</td>
+                                <td>${stats.highest_score || '0'}</td>
+                                <td>${stats.average || '0'}</td>
+                                <td>${stats.strike_rate || '0'}</td>
+                                <td>${stats.hundreds || '0'}</td>
+                                <td>${stats.fifties || '0'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
 
-            <h4>Batting Career Summary</h4>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Format</th>
-                        <th>Matches</th>
-                        <th>Runs</th>
-                        <th>High Score</th>
-                        <th>Average</th>
-                        <th>Strike Rate</th>
-                        <th>100s</th>
-                        <th>50s</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for i in "123"|make_list %}  {# Loop for different formats (Test, ODI, T20) #}
-                    <tr>
-                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"Mode2" }}</td>
-                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"Matches" }}</td>
-                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"Runs" }}</td>
-                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"HS" }}</td>
-                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"Avg" }}</td>
-                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"SR" }}</td>
-                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"100s" }}</td>
-                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"50s" }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
-    {% endif %}
-    
-</div>
-{% endblock %}
+        // Bowling Stats
+        const bowlingStats = playerData["bowling_stats"];
+        if (bowlingStats) {
+            container.innerHTML += `<h4>Bowling Career Summary</h4>`;
+            container.innerHTML += `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Format</th>
+                            <th>Balls</th>
+                            <th>Runs</th>
+                            <th>Wickets</th>
+                            <th>Economy</th>
+                            <th>Best Bowling</th>
+                            <th>5 Wickets</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${Object.entries(bowlingStats).map(([format, stats]) => `
+                            <tr>
+                                <td>${format.toUpperCase()}</td>
+                                <td>${stats.balls || '0'}</td>
+                                <td>${stats.runs || '0'}</td>
+                                <td>${stats.wickets || '0'}</td>
+                                <td>${stats.economy || '0'}</td>
+                                <td>${stats.best_bowling_innings || '0'}</td>
+                                <td>${stats.five_wickets || '0'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+    } else if (playerData && playerData.error) {
+        document.getElementById('player-info-container').innerHTML =
+            `<p class="error">${playerData.error}</p>`;
+    }
+</script>
+
+</body>
+</html>
