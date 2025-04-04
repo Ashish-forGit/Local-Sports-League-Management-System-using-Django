@@ -35,3 +35,9 @@ class CricketMatchForm(forms.ModelForm):
 from django import forms
 from .models import ScheduledMatch
 
+
+
+from django import forms
+
+class PlayerSearchForm(forms.Form):
+    player_name = forms.CharField(label="Player Last Name", max_length=100, required=True)

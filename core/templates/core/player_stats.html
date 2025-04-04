@@ -1,0 +1,61 @@
+{% extends 'core/base.html' %}
+{% load custom_filters %}
+
+
+
+
+{% block content %}
+<div class="container">
+    <h2>Search for Cricket Player Statistics</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <pre>{{ player_data }}</pre>  {# Debugging line #}
+
+
+    {% if player_data %}
+        {% if player_data.error %}
+            <p>{{ player_data.error }}</p>
+        {% else %}
+            <h3>Player Information</h3>
+            <p><strong>Name:</strong> {{ player_data.0|get_item:"Player Name" }}</p>
+
+            <p><strong>Country:</strong> {{ player_data.0|get_item:"Country" }}</p>
+            <p><strong>Role:</strong> {{ player_data.0|get_item:"Role" }}</p>
+
+            <h4>Batting Career Summary</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Format</th>
+                        <th>Matches</th>
+                        <th>Runs</th>
+                        <th>High Score</th>
+                        <th>Average</th>
+                        <th>Strike Rate</th>
+                        <th>100s</th>
+                        <th>50s</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in "123"|make_list %}  {# Loop for different formats (Test, ODI, T20) #}
+                    <tr>
+                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"Mode2" }}</td>
+                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"Matches" }}</td>
+                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"Runs" }}</td>
+                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"HS" }}</td>
+                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"Avg" }}</td>
+                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"SR" }}</td>
+                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"100s" }}</td>
+                        <td>{{ player_data.0|get_item:"Batting Career Summary"|get_item:i|get_item:"50s" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% endif %}
+    
+</div>
+{% endblock %}

@@ -225,12 +225,34 @@ def delete_match(request, match_id):
     except ScheduledMatch.DoesNotExist:
         return HttpResponseNotFound("Match not found.")
 
+import requests
+from django.shortcuts import render
+from .forms import PlayerSearchForm
 
+def player_stats(request):
+    player_data = None
+    form = PlayerSearchForm(request.POST or None)
 
+    if request.method == "POST":
+        if form.is_valid():
+            player_name = form.cleaned_data.get("player_name", "").strip()
 
+            if player_name:
+                api_url = f"https://cricket-api-demo.up.railway.app/players/{player_name}"
+                response = requests.get(api_url)
+                print("Raw API Response:", response.text)  # Debugging
 
+                if response.status_code == 200:
+                    try:
+                        player_data = response.json()
+                        print("Parsed JSON:", player_data)  # Debugging
+                    except ValueError:
+                        player_data = {"error": "Invalid API response"}
+                else:
+                    player_data = {"error": "Player not found"}
+            else:
+                player_data = {"error": "Please enter a player name"}
+        else:
+            player_data = {"error": "Form validation failed"}
 
-    
-
-
-
+    return render(request, 'core/player_stats.html', {'form': form, 'player_data': player_data})
