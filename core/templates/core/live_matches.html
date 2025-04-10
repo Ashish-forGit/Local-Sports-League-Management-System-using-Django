@@ -1,0 +1,64 @@
+{# Extending the base layout from core/base.html #}
+{% extends "core/base.html" %}
+
+{# Page Title Block #}
+{% block title %}Live Cricket Matches{% endblock %}
+
+{# Main Content Block #}
+{% block content %}
+    <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">
+        🏏 Live Cricket Matches
+    </h2>
+
+    {# Show error if data couldn't be fetched #}
+    {% if error %}
+        <p class="error" style="
+            text-align: center;
+            color: red;
+            font-weight: bold;
+            background-color: #ffe6e6;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: auto;
+        ">
+            {{ error }}
+        </p>
+
+    {# If matches are available, display them #}
+    {% else %}
+        <div class="match-list" style="
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            max-width: 700px;
+            margin: auto;
+        ">
+            {% for match in matches %}
+                <div class="match" style="
+                    padding: 15px 20px;
+                    border-bottom: 1px solid #eee;
+                    font-size: 16px;
+                    color: #34495e;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                ">
+                    {% if "rain" in match|lower %}
+                        <span style="font-size: 18px;">🌧️</span>
+                    {% elif "stumps" in match|lower %}
+                        <span style="font-size: 18px;">🛏️</span>
+                    {% elif "break" in match|lower %}
+                        <span style="font-size: 18px;">☕</span>
+                    {% elif "toss" in match|lower %}
+                        <span style="font-size: 18px;">🪙</span>
+                    {% else %}
+                        <span style="font-size: 18px;">🏏</span>
+                    {% endif %}
+                    {{ match }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

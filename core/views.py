@@ -265,4 +265,38 @@ def player_stats(request):
         'player_data': json_data
     })
 
+def live_matches(request):
+    api_url = "https://cricket-api-demo.up.railway.app/live"
+    matches = []
+    error = None
+
+    try:
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            matches = response.json()
+        else:
+            error = f"API returned status code {response.status_code}"
+    except Exception as e:
+        error = f"Error fetching data: {str(e)}"
+
+    context = {
+        'matches': matches,
+        'error': error
+    }
+    return render(request, 'core/live_matches.html', context)
+
+
+import requests
+from django.shortcuts import render
+
+def match_schedule(request):
+    api_url = "https://cricket-api-demo.up.railway.app/schedule"
+    try:
+        response = requests.get(api_url, timeout=10)
+        response.raise_for_status()
+        matches = response.json()
+        return render(request, "core/schedule.html", {"matches": matches})
+    except requests.exceptions.RequestException as e:
+        return render(request, "core/schedule.html", {"error": "Failed to load schedule. Please try again later."})
+
 

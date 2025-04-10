@@ -93,7 +93,8 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="sportsDropdown">
                             <!-- Dropdown menu items here -->
-                            <li><a class="dropdown-item" href="{% url 'core:schedule_match' %}">Schedule Matches</a></li>
+                            <li><a class="dropdown-item" href="{% url 'core:match_schedule' %}">Schedule </a></li>
+                            <li><a class="dropdown-item" href="{% url 'core:schedule_match' %}">Schedule Team Matches</a></li>
                             
                         </ul>
                     </li>
@@ -104,6 +105,9 @@
                     
                     <li class="nav-item">
                       <a class="nav-link" href="{% url 'core:player_stats' %}">STATS</a>
+                  </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'core:live_matches' %}">Live Matches</a>
                   </li>
                   
                     

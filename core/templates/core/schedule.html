@@ -1,0 +1,48 @@
+{% extends "core/base.html" %}
+
+{% block title %}Cricket Match Schedule{% endblock %}
+
+{% block content %}
+    <h2 style="text-align:center; margin-bottom: 30px; color: #2c3e50;">
+        📅 Upcoming Cricket Matches
+    </h2>
+
+    {% if error %}
+        <p class="error" style="
+            text-align: center;
+            color: red;
+            font-weight: bold;
+            background-color: #ffe6e6;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: auto;
+        ">
+            {{ error }}
+        </p>
+    {% else %}
+        <div class="match-schedule-list" style="
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            max-width: 900px;
+            margin: auto;
+        ">
+            {% for match in matches %}
+                <div class="match-card" style="
+                    margin-bottom: 20px;
+                    padding: 20px;
+                    border-left: 5px solid #3498db;
+                    background-color: #f9f9f9;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    color: #2c3e50;
+                    line-height: 1.5;
+                ">
+                    <span style="font-size: 18px;">🗓️</span> {{ match }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

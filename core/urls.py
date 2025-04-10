@@ -25,6 +25,10 @@ urlpatterns = [
 
     path('player-stats/', views.player_stats, name='player_stats'),
 
+    path('live-matches/', views.live_matches, name='live_matches'),
+
+    path('schedule/', views.match_schedule, name='match_schedule'),
+
 
 
 
