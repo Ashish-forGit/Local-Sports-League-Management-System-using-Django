@@ -1,0 +1,1 @@
+web: gunicorn Local_Sports_League_Management_System_using_Django.wsgi
